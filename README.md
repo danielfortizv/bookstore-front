@@ -1,36 +1,27 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Bookstore – Parcial
+## Daniel Felipe Ortiz - 202221234
 
-## Getting Started
+## Arquitectura
+Aplicación en Next.js (App Router) con TypeScript y Tailwind. El CRUD de autores consume `http://127.0.0.1:8080/api/authors`.  
+El estado de la lista se gestiona con un Context (`AuthorsProvider`). Para el parcial, se añadió la funcionalidad de **favoritos**, almacenando en memoria (Set de IDs) y persistiendo mientras se navega.  
+Rutas:
+- `/authors`: listado, con acciones de editar, eliminar y marcar favorito.
+- `/crear`: formulario controlado para crear autor.
+- `/authors/[id]/edit`: edición del autor.
+- `/favoritos`: listado filtrado de autores marcados como favoritos.
 
-First, run the development server:
+## Parte B elegida: Accesibilidad
+- Foco de teclado visible (`focus:ring` en botones y links).
+- Atributos ARIA en acciones: `aria-label` y `aria-pressed` para favoritos.
+- Formularios con `aria-invalid` y mensajes de error con `role="alert"`.
+- Botón de envío deshabilitado si el formulario es inválido.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Cómo correr
+1. Backend (Docker):
+   ```bash
+   docker build . -t bookstore
+   docker run -d -p 127.0.0.1:8080:8080 bookstore
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+2. Fronted:
+    npm install
+    npm run dev
