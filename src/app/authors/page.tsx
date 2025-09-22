@@ -1,12 +1,19 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect } from "react";
 import { useAuthorsApi } from "@/hooks/useAuthorsApi";
 import { useAuthorsState } from "../providers/AuthorsProvider";
 
 export default function AuthorsPage() {
   const { authors, setAuthors } = useAuthorsState();
   const api = useAuthorsApi();
+
+  useEffect(() => {
+    if (authors.length === 0) {
+      api.list().then(setAuthors).catch(console.error);
+    }
+  }, [authors.length, api, setAuthors]);
 
   const handleDelete = async (id: number) => {
     await api.remove(id);
