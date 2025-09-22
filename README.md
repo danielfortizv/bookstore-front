@@ -1,27 +1,34 @@
-# Bookstore – Parcial
+# Parcial Bookstore (Autores)
 ## Daniel Felipe Ortiz - 202221234
 
-## Arquitectura
-Aplicación en Next.js (App Router) con TypeScript y Tailwind. El CRUD de autores consume `http://127.0.0.1:8080/api/authors`.  
-El estado de la lista se gestiona con un Context (`AuthorsProvider`). Para el parcial, se añadió la funcionalidad de **favoritos**, almacenando en memoria (Set de IDs) y persistiendo mientras se navega.  
-Rutas:
-- `/authors`: listado, con acciones de editar, eliminar y marcar favorito.
-- `/crear`: formulario controlado para crear autor.
-- `/authors/[id]/edit`: edición del autor.
-- `/favoritos`: listado filtrado de autores marcados como favoritos.
+App hecha con Next.js (App Router) + TypeScript + Tailwind. Es una extensión del preparcial.
+Se conecta al back en "http://127.0.0.1:8080/api/authors".
 
-## Parte B elegida: Accesibilidad
-- Foco de teclado visible (`focus:ring` en botones y links).
-- Atributos ARIA en acciones: `aria-label` y `aria-pressed` para favoritos.
-- Formularios con `aria-invalid` y mensajes de error con `role="alert"`.
-- Botón de envío deshabilitado si el formulario es inválido.
+## Qué hice (rápido)
+- Lista de autores en "/authors" (lee del api).
+- Crear autor en "/crear".
+- Editar en "/authors/[id]/edit".
+- **Favoritos**: agregué un botón ":D" para marcar y una vista "/favoritos" que solo muestra los marcados. El estado de favs queda en memoria mientras uno navega (no guardo en BD).
 
-## Cómo correr
-1. Backend (Docker):
-   ```bash
-   docker build . -t bookstore
-   docker run -d -p 127.0.0.1:8080:8080 bookstore
+## Parte B -  ACCESIBILIDAD
+- **Accesibilidad** básica: usé "aria-label" para los botones (editar, eliminar, favorito), "aria-pressed" para favorito, y en el form puse Waria-invalid" + mensajes con "role="alert"". No es súper completo pero funciona :p.
 
-2. Fronted:
+## Cómo correr (como yo lo hice)
+1. Backend con Docker:
+    docker build . -t bookstore
+    docker run -d -p 127.0.0.1:8080:8080 bookstore
+    "Abres http://127.0.0.1:8080/api/authors y debe salir json."
+
+2.  Fronted:
     npm install
     npm run dev
+    Ir a http://localhost:3000
+
+
+## Notas
+- Eliminar: si el autor tiene libros, el back tira 412 y no deja (yo muestro un alert y ya).
+- Favoritos: se pierden si recargo (porque no los guardé en server ni localStorage). En clase pedían que se mantenga **mientras se navega**, y eso sí pasa.
+
+## Cosas que me faltaron (por tiempo)
+- Validaciones más chéveres (tipo RHF/Zod). Dejé lo básico con useState.
+- Estilos podrían estar mejor, pero preferí que funcione primero :D

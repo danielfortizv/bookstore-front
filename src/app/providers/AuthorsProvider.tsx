@@ -1,12 +1,11 @@
 "use client";
 
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { useAuthorsApi, type Author } from "@/hooks/useAuthorsApi";
 
 type Ctx = {
   authors: Author[];
   setAuthors: React.Dispatch<React.SetStateAction<Author[]>>;
-
   favorites: Set<number>;
   isFav: (id: number) => boolean;
   toggleFav: (id: number) => void;
@@ -19,22 +18,32 @@ export function AuthorsProvider({ children }: { children: React.ReactNode }) {
   const [favorites, setFavorites] = useState<Set<number>>(new Set());
   const api = useAuthorsApi();
 
-  useEffect(() => { api.list().then(setAuthors).catch(console.error); }, [api]);
+  // traigo los autores una vez (si algo falla lo veo en consola)
+  useEffect(() => {
+    api.list().then(setAuthors).catch((e) => {
+      console.error("error trayendo autores", e);
+    });
+  }, [api]);
 
-  const isFav = (id: number) => favorites.has(id);
-  const toggleFav = (id: number) =>
-    setFavorites(prev => {
+  function isFav(id: number) {
+    return favorites.has(id);
+  }
+
+  function toggleFav(id: number) {
+    // lo hice simple con Set porque me pareció rápido
+    setFavorites((prev) => {
       const next = new Set(prev);
-      next.has(id) ? next.delete(id) : next.add(id);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
       return next;
     });
+  }
 
-  const value = useMemo(
-    () => ({ authors, setAuthors, favorites, isFav, toggleFav }),
-    [authors, favorites]
+  return (
+    <AuthorsCtx.Provider value={{ authors, setAuthors, favorites, isFav, toggleFav }}>
+      {children}
+    </AuthorsCtx.Provider>
   );
-
-  return <AuthorsCtx.Provider value={value}>{children}</AuthorsCtx.Provider>;
 }
 
 export function useAuthorsState() {
